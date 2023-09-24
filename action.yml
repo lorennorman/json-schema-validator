@@ -1,18 +1,20 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'JSON Checker'
+description: 'Tools for open source maintainers to auto-triage JSON submissions in a friendly way to contributors'
+author: 'Loren Norman'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  schema:
+    description: 'The JSON Schema file to validate against'
     required: true
-    default: '1000'
+  json-files:
+    description: 'A globbed list of JSON files to validate'
+    required: true
 
-# Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  success:
+    description: 'Whether validation succeeded or not'
+  errors:
+    description: 'List of validation errors including line, position, and reason for failure'
 
 runs:
   using: node20
