@@ -1,5 +1,4 @@
 const core = require('@actions/core')
-const { wait } = require('./wait')
 
 /**
  * The main function for the action.
@@ -7,18 +6,30 @@ const { wait } = require('./wait')
  */
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true })
-
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
-
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    core.debug('Schema Input:', core.getInput('schema', { required: true }))
+    core.debug(
+      'JSON Files Input:',
+      core.getInput('json-files', { required: true })
+    )
 
     // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    const successOutput = true
+    const errorsOutput = [
+      {
+        message: "json didn't validate",
+        line: 2,
+        position: 8
+      },
+      {
+        message: "json still didn't validate",
+        line: 4,
+        position: 2
+      }
+    ]
+    core.debug('setting Success Output:', successOutput)
+    core.setOutput('success', successOutput)
+    core.debug('setting Errors Output:', errorsOutput)
+    core.setOutput('errors', errorsOutput)
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
